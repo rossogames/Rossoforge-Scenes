@@ -1,0 +1,18 @@
+{
+  "name": "com.rossogames.rossoforge-scenes",
+  "version": "1.0.0",
+  "displayName": "RossoForge-Scenes",
+  "description": "-----------",
+  "unity": "2025.0",
+  "author": {
+    "name": "Agustin Rosso",
+    "url": "https://www.linkedin.com/in/rossoagustin/"
+  },
+  "keywords": [
+    "Scenes",
+    "rossogames",
+    "rossoforge"
+  ],
+  "samples": [
+  ]
+}
