@@ -1,7 +1,7 @@
 {
   "name": "com.rossogames.rossoforge-scenes",
   "version": "1.0.0",
-  "displayName": "RossoForge-Scenes",
+  "displayName": "Rossoforge-Scenes",
   "description": "-----------",
   "unity": "2025.0",
   "author": {
@@ -13,6 +13,5 @@
     "rossogames",
     "rossoforge"
   ],
-  "samples": [
-  ]
+  "samples": []
 }
