@@ -1,0 +1,16 @@
+{
+    "name": "Rossoforge.Scenes.Components",
+    "rootNamespace": "Rossoforge.Scenes.Components",
+    "references": [
+        "GUID:b3cbb51ff65434d449548fe48c6c6d5e"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

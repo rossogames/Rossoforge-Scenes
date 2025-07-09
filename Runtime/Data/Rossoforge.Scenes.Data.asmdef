@@ -1,9 +1,7 @@
 {
-    "name": "Rossoforge.Scenes",
-    "rootNamespace": "Rossoforge.Scenes",
-    "references": [
-        "Rossoforge.Core"
-    ],
+    "name": "Rossoforge.Scenes.Data",
+    "rootNamespace": "Rossoforge.Scenes.Data",
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
