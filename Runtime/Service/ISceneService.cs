@@ -10,7 +10,8 @@ namespace Rossoforge.Scenes.Service
         string CurrentSceneName { get; }
         Awaitable LoadScene(string sceneName);
         Awaitable LoadScene(string sceneName, SceneTransitionData sceneTransitionData);
-
+        Awaitable GoBack();
+        Awaitable GoBack(SceneTransitionData sceneTransitionData);
         Awaitable Restart();
         Awaitable Restart(SceneTransitionData sceneTransitionData);
         /*

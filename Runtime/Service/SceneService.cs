@@ -71,14 +71,19 @@ namespace Rossoforge.Scenes.Service
         //    await SceneManager.UnloadSceneAsync(sceneName);
         //}
         //
-        //public void GoBack()
-        //{
-        //    if (!string.IsNullOrWhiteSpace(_previousSceneName))
-        //        LoadScene(_previousSceneName);
-        //}
+        public Awaitable GoBack()
+        {
+            return GoBack(_transitionDataDefault);
+        }
+        public async Awaitable GoBack(SceneTransitionData sceneTransitionData)
+        {
+            if (!string.IsNullOrWhiteSpace(_previousSceneName))
+                await LoadScene(_previousSceneName, sceneTransitionData);
+        }
+
         public Awaitable Restart()
         {
-            return LoadScene(CurrentSceneName);
+            return Restart(_transitionDataDefault);
         }
 
         public Awaitable Restart(SceneTransitionData sceneTransitionData)
