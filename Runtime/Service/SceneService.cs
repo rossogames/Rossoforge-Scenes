@@ -1,13 +1,14 @@
 using Rossoforge.Core.Events;
 using Rossoforge.Core.Services;
 using Rossoforge.Scenes.Data;
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Rossoforge.Scenes.Service
 {
-    public class SceneService : ISceneService
-    //IEventListener<SceneTransitionStandByEvent>,
+    public class SceneService : ISceneService, IInitializable, IDisposable,
+    IEventListener<SceneTransitionActiveEvent>
     //IEventListener<SceneTransitionCompletedEvent>
     {
         private IEventService _eventService;
@@ -26,27 +27,19 @@ namespace Rossoforge.Scenes.Service
         }
         public void Initialize()
         {
-            //_eventService.RegisterListener<SceneTransitionStandByEvent>(this);
+            _eventService.RegisterListener<SceneTransitionActiveEvent>(this);
             //_eventService.RegisterListener<SceneTransitionCompletedEvent>(this);
         }
         public void Dispose()
         {
-            //_eventService.UnregisterListener<SceneTransitionStandByEvent>(this);
+            _eventService.UnregisterListener<SceneTransitionActiveEvent>(this);
             //_eventService.UnregisterListener<SceneTransitionCompletedEvent>(this);
         }
 
-        //public async void OnEventInvoked(SceneTransitionStandByEvent eventArg)
-        //{
-        //    await SceneManager.UnloadSceneAsync(_previousSceneName);
-        //
-        //    if (!string.IsNullOrWhiteSpace(_nextSceneName))
-        //    {
-        //        await SceneManager.LoadSceneAsync(_nextSceneName, LoadSceneMode.Additive);
-        //        await Awaitable.NextFrameAsync();
-        //    }
-        //
-        //    _eventService.Raise<SceneTransitionCloseEvent>();
-        //}
+        public async void OnEventInvoked(SceneTransitionActiveEvent eventArg)
+        {
+            await OnTransitionSceneActive();
+        }
         //public async void OnEventInvoked(SceneTransitionCompletedEvent eventArg)
         //{
         //    await SceneManager.UnloadSceneAsync(_transitionData.TransitionSceneName);
@@ -90,6 +83,19 @@ namespace Rossoforge.Scenes.Service
         public void Restart()
         {
             LoadScene(CurrentSceneName);
+        }
+
+        private async Awaitable OnTransitionSceneActive()
+        {
+            await SceneManager.UnloadSceneAsync(_previousSceneName);
+
+            if (!string.IsNullOrWhiteSpace(_nextSceneName))
+            {
+                await SceneManager.LoadSceneAsync(_nextSceneName, LoadSceneMode.Additive);
+                await Awaitable.NextFrameAsync();
+            }
+
+            //_eventService.Raise<SceneTransitionCloseEvent>();
         }
     }
 }
