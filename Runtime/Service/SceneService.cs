@@ -1,6 +1,7 @@
 using Rossoforge.Core.Events;
 using Rossoforge.Core.Services;
 using Rossoforge.Scenes.Data;
+using Rossoforge.Scenes.Events;
 using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
