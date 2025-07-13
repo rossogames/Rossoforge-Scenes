@@ -8,8 +8,8 @@ using UnityEngine.SceneManagement;
 namespace Rossoforge.Scenes.Service
 {
     public class SceneService : ISceneService, IInitializable, IDisposable,
-    IEventListener<SceneTransitionActiveEvent>,
-    IEventListener<SceneTransitionInactiveEvent>
+        IEventListener<SceneTransitionActiveEvent>,
+        IEventListener<SceneTransitionInactiveEvent>
     {
         private IEventService _eventService;
 
@@ -59,10 +59,10 @@ namespace Rossoforge.Scenes.Service
         {
             if (IsLoading)
                 return;
-        
+
             _previousSceneName = CurrentSceneName;
             _nextSceneName = sceneName;
-        
+
             IsLoading = true;
             await SceneManager.LoadSceneAsync(sceneName, loadSceneMode);
             IsLoading = false;
@@ -86,7 +86,7 @@ namespace Rossoforge.Scenes.Service
         }
         public Awaitable RestartScene(SceneTransitionData sceneTransitionData)
         {
-           return ChangeScene(CurrentSceneName, sceneTransitionData);
+            return ChangeScene(CurrentSceneName, sceneTransitionData);
         }
 
         public async void OnEventInvoked(SceneTransitionActiveEvent eventArg)
@@ -95,7 +95,7 @@ namespace Rossoforge.Scenes.Service
         }
         public async void OnEventInvoked(SceneTransitionInactiveEvent eventArg)
         {
-           await UnloadTransitionScene();
+            await UnloadTransitionScene();
         }
 
         private async Awaitable ChangeNextScene()
