@@ -2,9 +2,7 @@ using Rossoforge.Core.Events;
 using Rossoforge.Core.Services;
 using Rossoforge.Scenes.Data;
 using System;
-using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 using UnityEngine.SceneManagement;
 
 namespace Rossoforge.Scenes.Service
@@ -39,16 +37,16 @@ namespace Rossoforge.Scenes.Service
             _eventService.UnregisterListener<SceneTransitionInactiveEvent>(this);
         }
 
-        public Awaitable LoadScene(string sceneName)
+        public Awaitable ChangeScene(string sceneName)
         {
-            return LoadScene(sceneName, _transitionDataDefault);
+            return ChangeScene(sceneName, _transitionDataDefault);
         }
-        public async Awaitable LoadScene(string sceneName, SceneTransitionData sceneTransitionData)
+        public async Awaitable ChangeScene(string sceneName, SceneTransitionData sceneTransitionData)
         {
-            _currentTransitionData = sceneTransitionData;
-
             if (IsLoading)
                 return;
+
+            _currentTransitionData = sceneTransitionData;
 
             _previousSceneName = CurrentSceneName;
             _nextSceneName = sceneName;
@@ -57,38 +55,38 @@ namespace Rossoforge.Scenes.Service
 
             await SceneManager.LoadSceneAsync(sceneTransitionData.TransitionSceneName, LoadSceneMode.Additive);
         }
-        //public async void UnloadScene(string sceneName, SceneTransitionData sceneTransition)
-        //{
-        //    _transitionDataDefault = sceneTransition;
-        //    _previousSceneName = sceneName;
-        //    _nextSceneName = null;
-        //    await SceneManager.LoadSceneAsync(_transitionDataDefault.TransitionSceneName, LoadSceneMode.Additive);
-        //
-        //    //_eventService.Raise(new SceneUnloadedEvent(_previousSceneName));
-        //}
-        //public async void UnloadScene(string sceneName)
-        //{
-        //    await SceneManager.UnloadSceneAsync(sceneName);
-        //}
-        //
-        public Awaitable GoBack()
+        public async Awaitable LoadScene(string sceneName, LoadSceneMode loadSceneMode)
         {
-            return GoBack(_transitionDataDefault);
+            if (IsLoading)
+                return;
+        
+            _previousSceneName = CurrentSceneName;
+            _nextSceneName = sceneName;
+        
+            IsLoading = true;
+            await SceneManager.LoadSceneAsync(sceneName, loadSceneMode);
+            IsLoading = false;
         }
-        public async Awaitable GoBack(SceneTransitionData sceneTransitionData)
+        public async Awaitable UnloadScene(string sceneName)
+        {
+            await SceneManager.UnloadSceneAsync(sceneName);
+        }
+        public Awaitable GoBackScene()
+        {
+            return GoBackScene(_transitionDataDefault);
+        }
+        public async Awaitable GoBackScene(SceneTransitionData sceneTransitionData)
         {
             if (!string.IsNullOrWhiteSpace(_previousSceneName))
-                await LoadScene(_previousSceneName, sceneTransitionData);
+                await ChangeScene(_previousSceneName, sceneTransitionData);
         }
-
-        public Awaitable Restart()
+        public Awaitable RestartScene()
         {
-            return Restart(_transitionDataDefault);
+            return RestartScene(_transitionDataDefault);
         }
-
-        public Awaitable Restart(SceneTransitionData sceneTransitionData)
+        public Awaitable RestartScene(SceneTransitionData sceneTransitionData)
         {
-           return LoadScene(CurrentSceneName, sceneTransitionData);
+           return ChangeScene(CurrentSceneName, sceneTransitionData);
         }
 
         public async void OnEventInvoked(SceneTransitionActiveEvent eventArg)
@@ -112,7 +110,6 @@ namespace Rossoforge.Scenes.Service
 
             _eventService.Raise<TargetSceneLoadedCompletedEvent>();
         }
-
         private async Awaitable UnloadTransitionScene()
         {
             await SceneManager.UnloadSceneAsync(_currentTransitionData.TransitionSceneName);
