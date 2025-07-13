@@ -3,6 +3,7 @@ using Rossoforge.Core.Services;
 using Rossoforge.Scenes.Data;
 using Rossoforge.Scenes.Events;
 using System;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -54,7 +55,7 @@ namespace Rossoforge.Scenes.Service
 
             IsLoading = true;
 
-            await SceneManager.LoadSceneAsync(sceneTransitionData.TransitionSceneName, LoadSceneMode.Additive);
+            await LoadSceneAsync(sceneTransitionData.TransitionSceneName, LoadSceneMode.Additive);
         }
         public async Awaitable LoadScene(string sceneName, LoadSceneMode loadSceneMode)
         {
@@ -65,7 +66,7 @@ namespace Rossoforge.Scenes.Service
             _nextSceneName = sceneName;
 
             IsLoading = true;
-            await SceneManager.LoadSceneAsync(sceneName, loadSceneMode);
+            await LoadSceneAsync(sceneName, loadSceneMode);
             IsLoading = false;
         }
         public async Awaitable UnloadScene(string sceneName)
@@ -101,11 +102,11 @@ namespace Rossoforge.Scenes.Service
 
         private async Awaitable ChangeNextScene()
         {
-            await SceneManager.UnloadSceneAsync(_previousSceneName);
+            await UnloadSceneAsync(_previousSceneName);
 
             if (!string.IsNullOrWhiteSpace(_nextSceneName))
             {
-                await SceneManager.LoadSceneAsync(_nextSceneName, LoadSceneMode.Additive);
+                await LoadSceneAsync(_nextSceneName, LoadSceneMode.Additive);
                 await Awaitable.NextFrameAsync();
             }
 
@@ -113,8 +114,32 @@ namespace Rossoforge.Scenes.Service
         }
         private async Awaitable UnloadTransitionScene()
         {
-            await SceneManager.UnloadSceneAsync(_currentTransitionData.TransitionSceneName);
+            await UnloadSceneAsync(_currentTransitionData.TransitionSceneName);
             IsLoading = false;
+        }
+
+        private async Awaitable LoadSceneAsync(string sceneName, LoadSceneMode mode)
+        {
+            var asyncOp = SceneManager.LoadSceneAsync(sceneName, mode);
+            if (asyncOp == null)
+            {
+                Debug.LogError($"Failed to load scene {sceneName}");
+                return;
+            }
+
+            await asyncOp;
+        }
+
+        private async Awaitable UnloadSceneAsync(string sceneName)
+        {
+            var asyncOp = SceneManager.UnloadSceneAsync(sceneName);
+            if (asyncOp == null)
+            {
+                Debug.LogError($"Failed to unload scene {sceneName}");
+                return;
+            }
+
+            await asyncOp;
         }
     }
 }
