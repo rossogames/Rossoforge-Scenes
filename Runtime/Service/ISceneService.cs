@@ -11,11 +11,12 @@ namespace Rossoforge.Scenes.Service
         Awaitable LoadScene(string sceneName);
         Awaitable LoadScene(string sceneName, SceneTransitionData sceneTransitionData);
 
+        Awaitable Restart();
+        Awaitable Restart(SceneTransitionData sceneTransitionData);
         /*
         void UnloadScene(string sceneName, SceneTransitionProfile sceneTransition);
         void UnloadScene(string sceneName);
         void GoBack();
-        void Restart();
         */
     }
 }

@@ -2,7 +2,9 @@ using Rossoforge.Core.Events;
 using Rossoforge.Core.Services;
 using Rossoforge.Scenes.Data;
 using System;
+using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 using UnityEngine.SceneManagement;
 
 namespace Rossoforge.Scenes.Service
@@ -74,10 +76,15 @@ namespace Rossoforge.Scenes.Service
         //    if (!string.IsNullOrWhiteSpace(_previousSceneName))
         //        LoadScene(_previousSceneName);
         //}
-        //public void Restart()
-        //{
-        //    LoadScene(CurrentSceneName);
-        //}
+        public Awaitable Restart()
+        {
+            return LoadScene(CurrentSceneName);
+        }
+
+        public Awaitable Restart(SceneTransitionData sceneTransitionData)
+        {
+           return LoadScene(CurrentSceneName, sceneTransitionData);
+        }
 
         public async void OnEventInvoked(SceneTransitionActiveEvent eventArg)
         {
