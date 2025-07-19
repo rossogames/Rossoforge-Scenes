@@ -2,7 +2,7 @@
 
 <table>
   <tr>
-    <td><img src="https://github.com/rossogames/Rossoforge-Scenes/blob/master/logo.png?raw=true" alt="Rossoforge" width="64"/></td>
+    <td><img src="https://github.com/rossogames/Rossoforge-Scenes/blob/main/logo.png?raw=true" alt="Rossoforge" width="64"/></td>
     <td><h2>Rossoforge-Scenes</h2></td>
   </tr>
 </table>
