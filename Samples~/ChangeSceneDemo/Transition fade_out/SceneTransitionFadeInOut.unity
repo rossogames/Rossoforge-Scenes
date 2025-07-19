@@ -208,7 +208,7 @@ GameObject:
   - component: {fileID: 1430952940}
   - component: {fileID: 1430952946}
   - component: {fileID: 1430952944}
-  - component: {fileID: 1430952945}
+  - component: {fileID: 1430952947}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -309,7 +309,7 @@ Animator:
   m_GameObject: {fileID: 1430952938}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: ac5ab3cb8f738cb4bbd57aff7c642d50, type: 2}
+  m_Controller: {fileID: 22100000, guid: 77869d877f369274b9fd9dbf090d13b4, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 2
   m_ApplyRootMotion: 0
@@ -321,19 +321,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1430952945
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1430952938}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb61300dd1cf742478496fb0495d8dde, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Animator: {fileID: 0}
 --- !u!225 &1430952946
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -346,6 +333,19 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &1430952947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1430952938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77f970276f69b7a4ca86caedab32ad40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Animator: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

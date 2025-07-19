@@ -5,7 +5,7 @@ using Rossoforge.Scenes.Service;
 using Rossoforge.Services;
 using UnityEngine;
 
-namespace Rossoforge.Scenes.Samples.ChangeScene
+namespace Rossoforge.Scenes.Samples.ChangeSceneDemo
 {
     public class Boot : MonoBehaviour
     {

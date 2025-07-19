@@ -900,7 +900,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneName: SceneTransitionB
-  _customSceneTransitionData: {fileID: 11400000, guid: 40e11a5ac589a654c8e80b3d1e309b5e, type: 2}
+  _customSceneTransitionData: {fileID: 11400000, guid: 6189958a7a26ad94aa8b0553fee5b5c3, type: 2}
 --- !u!1 &1945718333
 GameObject:
   m_ObjectHideFlags: 0

@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ba0759d23313984db1fc72f01b3490f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sceneTransitionData: {fileID: 11400000, guid: 659ca7eb590d0854bb7a6bfcb36d573b, type: 2}
+  _sceneTransitionData: {fileID: 11400000, guid: bbf610a26ae3daa4d8a00cacfb6736dd, type: 2}
 --- !u!4 &58621762
 Transform:
   m_ObjectHideFlags: 0

@@ -2,7 +2,7 @@ using Rossoforge.Core.Events;
 using Rossoforge.Services;
 using UnityEngine;
 
-namespace Rossoforge.Scenes.Samples.SceneTransitionFadeInOut
+namespace Rossoforge.Scenes.Samples.ChangeSceneDemo
 {
     [RequireComponent(typeof(Animator))]
     public class TransitionFadeInOut : SceneTransition
