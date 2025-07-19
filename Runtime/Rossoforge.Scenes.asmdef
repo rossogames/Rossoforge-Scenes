@@ -1,7 +1,9 @@
 {
-    "name": "RossoForge.Scenes",
-    "rootNamespace": "RossoForge.Scenes",
-    "references": [],
+    "name": "Rossoforge.Scenes",
+    "rootNamespace": "Rossoforge.Scenes",
+    "references": [
+        "Rossoforge.Core"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

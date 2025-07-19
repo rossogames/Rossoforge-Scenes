@@ -1,18 +1,41 @@
 {
   "name": "com.rossogames.rossoforge-scenes",
-  "version": "1.0.0",
-  "displayName": "RossoForge-Scenes",
-  "description": "-----------",
+  "version": "1.1.0",
+  "displayName": "Rossoforge-Scenes",
+  "description": "A lightweight and flexible service that centralizes scene loading, unloading, and transitions, ensuring smooth and efficient navigation between scenes. It is designed to simplify and streamline scene management in Unity projects",
   "unity": "2025.0",
   "author": {
     "name": "Agustin Rosso",
     "url": "https://www.linkedin.com/in/rossoagustin/"
   },
   "keywords": [
-    "Scenes",
+    "scene",
+    "scenes",
+    "transition",
+    "transitions",
     "rossogames",
     "rossoforge"
   ],
   "samples": [
+    {
+      "displayName": "Transition animator",
+      "description": "Includes a default Animator Controller and 4 Animator Clips that can be used as the base for scene transition effects. This sample provides a simple, animation-driven approach to customize how scenes appear and disappear.",
+      "path": "Samples~/SceneTransitionAnimation"
+    },
+    {
+      "displayName": "Transition fade/out",
+      "description": "Overrides the default Animator Controller to create a classic fade-in/fade-out transition effect. This sample requires the 'Transition animator' sample to work properly.",
+      "path": "Samples~/SceneTransitionFadeInOut"
+    },
+    {
+      "displayName": "Transition side left to right",
+      "description": "Overrides the default Animator Controller to produce a left-to-right sliding screen transition. This sample requires the 'Transition animator' sample to work properly.",
+      "path": "Samples~/SceneTransitionSideLeftToRight"
+    },
+    {
+      "displayName": "Change Scene Demo",
+      "path": "Samples~/ChangeSceneDemo",
+      "description": "Demonstrates how to switch between scenes using the Scene Service, including built-in transition animations such as fade in/out and slide from left to right. This sample provides a complete example of animated scene transitions in action."
+    }
   ]
 }
