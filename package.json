@@ -35,7 +35,7 @@
     {
       "displayName": "Change Scene Demo",
       "path": "Samples~/ChangeSceneDemo",
-      "description": "Demonstrates how to switch between scenes using the Scene Service, including built-in transition animations such as fade in/out and slide from left to right. This sample provides a complete example of animated scene transitions in action."
+      "description": "Demonstrates how to switch between scenes using the Scene Service, requiere the Transition animator and animation samples"
     }
   ]
 }
