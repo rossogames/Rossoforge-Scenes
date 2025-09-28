@@ -1,6 +1,6 @@
 using Rossoforge.Core.Events;
+using Rossoforge.Core.Scenes;
 using Rossoforge.Events.Service;
-using Rossoforge.Scenes.Data;
 using Rossoforge.Scenes.Service;
 using Rossoforge.Services;
 using UnityEngine;
@@ -10,7 +10,7 @@ namespace Rossoforge.Scenes.Samples.ChangeSceneDemo
     public class Boot : MonoBehaviour
     {
         [SerializeField]
-        private SceneTransitionData _sceneTransitionData;
+        private SceneServiceData _sceneServiceData;
 
         private void Awake()
         {
@@ -18,7 +18,7 @@ namespace Rossoforge.Scenes.Samples.ChangeSceneDemo
             ServiceLocator.SetLocator(new DefaultServiceLocator());
 
             var eventService = new EventService();
-            var sceneService = new SceneService(eventService, _sceneTransitionData);
+            var sceneService = new SceneService(eventService, _sceneServiceData);
 
             ServiceLocator.Register<IEventService>(eventService);
             ServiceLocator.Register<ISceneService>(sceneService);
