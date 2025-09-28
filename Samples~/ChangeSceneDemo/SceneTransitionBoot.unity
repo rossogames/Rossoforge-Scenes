@@ -163,7 +163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3131cda58f343e4aa47b7df917a45d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sceneTransitionData: {fileID: 11400000, guid: 659ca7eb590d0854bb7a6bfcb36d573b, type: 2}
+  _sceneServiceData: {fileID: 11400000, guid: b67662d6acb72eb4db396265157ea97b, type: 2}
 --- !u!1 &223000442
 GameObject:
   m_ObjectHideFlags: 0
