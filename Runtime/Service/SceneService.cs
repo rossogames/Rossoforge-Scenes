@@ -1,4 +1,5 @@
 using Rossoforge.Core.Events;
+using Rossoforge.Core.Scenes;
 using Rossoforge.Core.Services;
 using Rossoforge.Scenes.Data;
 using Rossoforge.Scenes.Events;
@@ -13,19 +14,19 @@ namespace Rossoforge.Scenes.Service
         IEventListener<SceneTransitionInactiveEvent>
     {
         private IEventService _eventService;
+        private SceneServiceData _serviceData;
 
         private string _previousSceneName;
         private string _nextSceneName;
-        private SceneTransitionData _transitionDataDefault;
-        private SceneTransitionData _currentTransitionData;
+        private ISceneTransitionData _currentTransitionData;
 
         public string CurrentSceneName => SceneManager.GetActiveScene().name;
         public bool IsLoading { get; private set; }
 
-        public SceneService(IEventService eventService, SceneTransitionData sceneTransitionData)
+        public SceneService(IEventService eventService, SceneServiceData serviceData)
         {
             _eventService = eventService;
-            _transitionDataDefault = sceneTransitionData;
+            _serviceData = serviceData;
         }
         public void Initialize()
         {
@@ -40,9 +41,9 @@ namespace Rossoforge.Scenes.Service
 
         public Awaitable ChangeScene(string sceneName)
         {
-            return ChangeScene(sceneName, _transitionDataDefault);
+            return ChangeScene(sceneName, _serviceData.DefaultSceneTransitionData);
         }
-        public async Awaitable ChangeScene(string sceneName, SceneTransitionData sceneTransitionData)
+        public async Awaitable ChangeScene(string sceneName, ISceneTransitionData sceneTransitionData)
         {
             if (IsLoading)
                 return;
@@ -74,18 +75,18 @@ namespace Rossoforge.Scenes.Service
         }
         public Awaitable GoBackScene()
         {
-            return GoBackScene(_transitionDataDefault);
+            return GoBackScene(_serviceData.DefaultSceneTransitionData);
         }
-        public async Awaitable GoBackScene(SceneTransitionData sceneTransitionData)
+        public async Awaitable GoBackScene(ISceneTransitionData sceneTransitionData)
         {
             if (!string.IsNullOrWhiteSpace(_previousSceneName))
                 await ChangeScene(_previousSceneName, sceneTransitionData);
         }
         public Awaitable RestartScene()
         {
-            return RestartScene(_transitionDataDefault);
+            return RestartScene(_serviceData.DefaultSceneTransitionData);
         }
-        public Awaitable RestartScene(SceneTransitionData sceneTransitionData)
+        public Awaitable RestartScene(ISceneTransitionData sceneTransitionData)
         {
             return ChangeScene(CurrentSceneName, sceneTransitionData);
         }
