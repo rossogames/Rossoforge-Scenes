@@ -9,11 +9,12 @@
 
 **Rossoforge-Scenes** A lightweight and flexible service that centralizes scene loading, unloading, and transitions, ensuring smooth and efficient navigation between scenes. It is designed to simplify and streamline scene management in Unity projects
 
-**Version**: Unity 6 or higher
+#
+**Version:** Unity 6 or higher
 
-**Tutorial**: [Pending...]
+**Tutorial:** [Pending...]
 
-**Dependencies**
+**Dependencies:**
 * [Rossoforge-Core](https://github.com/rossogames/Rossoforge-Core.git)
 * [Rossoforge-Events](https://github.com/rossogames/Rossoforge-Events.git)
 * [Rossoforge-Services](https://github.com/rossogames/Rossoforge-Services.git) (Optional)
