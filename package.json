@@ -1,6 +1,6 @@
 {
   "name": "com.rossogames.rossoforge-scenes",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "displayName": "Rossoforge-Scenes",
   "description": "A lightweight and flexible service that centralizes scene loading, unloading, and transitions, ensuring smooth and efficient navigation between scenes. It is designed to simplify and streamline scene management in Unity projects",
   "unity": "2025.0",
@@ -35,7 +35,7 @@
     {
       "displayName": "Change Scene Demo",
       "path": "Samples~/ChangeSceneDemo",
-      "description": "Demonstrates how to switch between scenes using the Scene Service, including built-in transition animations such as fade in/out and slide from left to right. This sample provides a complete example of animated scene transitions in action."
+      "description": "Demonstrates how to switch between scenes using the Scene Service, requiere the Transition animator and animation samples"
     }
   ]
 }

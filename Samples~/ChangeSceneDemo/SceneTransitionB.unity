@@ -398,8 +398,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 674107003}
-        m_TargetAssemblyTypeName: SceneSwitcherDemo, Assembly-CSharp
+      - m_Target: {fileID: 1271635293}
+        m_TargetAssemblyTypeName: Rossoforge.Scenes.Samples.ChangeSceneDemo.SceneSwitcherDemo,
+          Assembly-CSharp
         m_MethodName: OnButtonSwitchCustomClick
         m_Mode: 1
         m_Arguments:
@@ -460,7 +461,6 @@ GameObject:
   - component: {fileID: 674107006}
   - component: {fileID: 674107005}
   - component: {fileID: 674107004}
-  - component: {fileID: 674107003}
   m_Layer: 5
   m_Name: 'Canvas '
   m_TagString: Untagged
@@ -468,20 +468,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &674107003
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 674107002}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c82721d142b212d4bb9a92af95b33871, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sceneName: SceneTransitionA
-  _customSceneTransitionData: {fileID: 11400000, guid: 6189958a7a26ad94aa8b0553fee5b5c3, type: 2}
 --- !u!114 &674107004
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -809,8 +795,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 674107003}
-        m_TargetAssemblyTypeName: SceneSwitcherDemo, Assembly-CSharp
+      - m_Target: {fileID: 1271635293}
+        m_TargetAssemblyTypeName: Rossoforge.Scenes.Samples.ChangeSceneDemo.SceneSwitcherDemo,
+          Assembly-CSharp
         m_MethodName: OnButtonSwitchDefaultClick
         m_Mode: 1
         m_Arguments:
@@ -859,6 +846,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1059100749}
   m_CullTransparentMesh: 1
+--- !u!1 &1271635292
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1271635294}
+  - component: {fileID: 1271635293}
+  m_Layer: 0
+  m_Name: Demo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1271635293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1271635292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c82721d142b212d4bb9a92af95b33871, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneName: SceneTransitionA
+  _customSceneTransitionData: {fileID: 11400000, guid: 40e11a5ac589a654c8e80b3d1e309b5e, type: 2}
+--- !u!4 &1271635294
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1271635292}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1548085808
 GameObject:
   m_ObjectHideFlags: 0
@@ -1117,3 +1150,4 @@ SceneRoots:
   - {fileID: 362942167}
   - {fileID: 674107007}
   - {fileID: 1021595170}
+  - {fileID: 1271635294}
