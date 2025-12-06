@@ -23,7 +23,7 @@
       "path": "Samples~/SceneTransitionAnimation"
     },
     {
-      "displayName": "Transition fade/out",
+      "displayName": "Transition fade in/out",
       "description": "Overrides the default Animator Controller to create a classic fade-in/fade-out transition effect. This sample requires the 'Transition animator' sample to work properly.",
       "path": "Samples~/SceneTransitionFadeInOut"
     },
