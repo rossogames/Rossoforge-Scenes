@@ -3,6 +3,7 @@ using Rossoforge.Core.Scenes;
 using Rossoforge.Scenes.Data;
 using Rossoforge.Scenes.Events;
 using Rossoforge.Services;
+using Rossoforge.Utils.Logger;
 using UnityEngine;
 
 namespace Rossoforge.Scenes.Samples.ChangeSceneDemo
@@ -68,25 +69,25 @@ namespace Rossoforge.Scenes.Samples.ChangeSceneDemo
         public void OnEventInvoked(SceneTransitionEnteringEvent eventArg)
         {
             // Do something when the scene transition is entering.
-            Debug.LogWarning("SceneTransition - Entering ");
+            RossoLogger.Info("SceneTransition - Entering ");
         }
 
         public void OnEventInvoked(SceneTransitionActiveEvent eventArg)
         {
             // Do something when the scene transition is active.
-            Debug.LogWarning("SceneTransition - Active");
+            RossoLogger.Info("SceneTransition - Active");
         }
 
         public void OnEventInvoked(SceneTransitionExitingEvent eventArg)
         {
             // Do something when the scene transition is exiting.
-            Debug.LogWarning("SceneTransition - Exiting");
+            RossoLogger.Info("SceneTransition - Exiting");
         }
 
         public void OnEventInvoked(SceneTransitionInactiveEvent eventArg)
         {
             // Do something when the scene transition is inactive.
-            Debug.LogWarning("SceneTransition - Inactive");
+            RossoLogger.Info("SceneTransition - Inactive");
         }
     }
 }
