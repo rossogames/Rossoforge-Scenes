@@ -1,6 +1,6 @@
 {
   "name": "com.rossogames.rossoforge-scenes",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "displayName": "Rossoforge-Scenes",
   "description": "A lightweight and flexible service that centralizes scene loading, unloading, and transitions, ensuring smooth and efficient navigation between scenes. It is designed to simplify and streamline scene management in Unity projects",
   "unity": "2025.0",
