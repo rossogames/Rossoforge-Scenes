@@ -1,8 +1,8 @@
 using Rossoforge.Core.Events;
 using Rossoforge.Core.Scenes;
 using Rossoforge.Core.Services;
-using Rossoforge.Scenes.Data;
 using Rossoforge.Scenes.Events;
+using Rossoforge.Utils.Logger;
 using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -13,8 +13,8 @@ namespace Rossoforge.Scenes.Service
         IEventListener<SceneTransitionActiveEvent>,
         IEventListener<SceneTransitionInactiveEvent>
     {
-        private IEventService _eventService;
-        private SceneServiceData _serviceData;
+        private readonly IEventService _eventService;
+        private readonly SceneServiceData _serviceData;
 
         private string _previousSceneName;
         private string _nextSceneName;
@@ -123,7 +123,7 @@ namespace Rossoforge.Scenes.Service
             var asyncOp = SceneManager.LoadSceneAsync(sceneName, mode);
             if (asyncOp == null)
             {
-                Debug.LogError($"Failed to load scene {sceneName}");
+                RossoLogger.Error($"Failed to load scene {sceneName}");
                 return;
             }
 
@@ -135,7 +135,7 @@ namespace Rossoforge.Scenes.Service
             var asyncOp = SceneManager.UnloadSceneAsync(sceneName);
             if (asyncOp == null)
             {
-                Debug.LogError($"Failed to unload scene {sceneName}");
+                RossoLogger.Error($"Failed to unload scene {sceneName}");
                 return;
             }
 
