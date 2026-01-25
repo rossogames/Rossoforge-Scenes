@@ -18,7 +18,7 @@
 * [Rossoforge-Core](https://github.com/rossogames/Rossoforge-Core.git)
 * [Rossoforge-Utils](https://github.com/rossogames/Rossoforge-Utils.git)
 * [Rossoforge-Events](https://github.com/rossogames/Rossoforge-Events.git)
-* [Rossoforge-Services](https://github.com/rossogames/Rossoforge-Services.git) (Optional)
+* [Rossoforge-Services](https://github.com/rossogames/Rossoforge-Services.git)
 
 #
 
@@ -27,7 +27,7 @@
 ServiceLocator.SetLocator(new DefaultServiceLocator());
 
 var eventService = new EventService();
-var sceneService = new SceneService(eventService, _sceneTransitionData);
+var sceneService = new SceneService(_sceneTransitionData);
 
 ServiceLocator.Register<IEventService>(eventService);
 ServiceLocator.Register<ISceneService>(sceneService);

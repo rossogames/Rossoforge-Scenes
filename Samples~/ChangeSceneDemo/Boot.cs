@@ -18,7 +18,7 @@ namespace Rossoforge.Scenes.Samples.ChangeSceneDemo
             ServiceLocator.SetLocator(new DefaultServiceLocator());
 
             var eventService = new EventService();
-            var sceneService = new SceneService(eventService, _sceneServiceData);
+            var sceneService = new SceneService(_sceneServiceData);
 
             ServiceLocator.Register<IEventService>(eventService);
             ServiceLocator.Register<ISceneService>(sceneService);
@@ -26,6 +26,5 @@ namespace Rossoforge.Scenes.Samples.ChangeSceneDemo
 
             sceneService.ChangeScene("SceneTransitionA");
         }
-
     }
 }

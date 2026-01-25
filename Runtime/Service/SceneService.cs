@@ -2,6 +2,7 @@ using Rossoforge.Core.Events;
 using Rossoforge.Core.Scenes;
 using Rossoforge.Core.Services;
 using Rossoforge.Scenes.Events;
+using Rossoforge.Services;
 using Rossoforge.Utils.Logger;
 using System;
 using UnityEngine;
@@ -13,8 +14,8 @@ namespace Rossoforge.Scenes.Service
         IEventListener<SceneTransitionActiveEvent>,
         IEventListener<SceneTransitionInactiveEvent>
     {
-        private readonly IEventService _eventService;
-        private readonly SceneServiceData _serviceData;
+        private IEventService _eventService;
+        private SceneServiceData _serviceData;
 
         private string _previousSceneName;
         private string _nextSceneName;
@@ -23,13 +24,14 @@ namespace Rossoforge.Scenes.Service
         public string CurrentSceneName => SceneManager.GetActiveScene().name;
         public bool IsLoading { get; private set; }
 
-        public SceneService(IEventService eventService, SceneServiceData serviceData)
+        public SceneService(SceneServiceData serviceData)
         {
-            _eventService = eventService;
             _serviceData = serviceData;
         }
         public void Initialize()
         {
+            _eventService = ServiceLocator.Get<IEventService>();
+
             _eventService.RegisterListener<SceneTransitionActiveEvent>(this);
             _eventService.RegisterListener<SceneTransitionInactiveEvent>(this);
         }
