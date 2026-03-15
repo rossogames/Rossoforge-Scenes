@@ -3,6 +3,7 @@
     "rootNamespace": "Rossoforge.Scenes",
     "references": [
         "Rossoforge.Core",
+        "Rossoforge.Services",
         "Rossoforge.Utils"
     ],
     "includePlatforms": [],
