@@ -18,11 +18,11 @@ namespace Rossoforge.Scenes.Service
         private SceneServiceData _serviceData;
 
         private string _previousSceneName;
-        private string _nextSceneName;
         private ISceneTransitionData _currentTransitionData;
+        private AwaitableCompletionSource _transitionEffectCompletionSource;
 
         public string CurrentSceneName => SceneManager.GetActiveScene().name;
-        public bool IsLoading { get; private set; }
+        public bool _isTransitionRuning;
 
         public SceneService(SceneServiceData serviceData)
         {
@@ -41,39 +41,26 @@ namespace Rossoforge.Scenes.Service
             _eventService.UnregisterListener<SceneTransitionInactiveEvent>(this);
         }
 
+        public async Awaitable UnloadCurrentScene(ISceneTransitionData sceneTransitionData)
+        {
+            await LoadTransitionScene(sceneTransitionData);
+
+            _previousSceneName = CurrentSceneName;
+            await UnloadSceneAsync(CurrentSceneName);
+        }
+        public async Awaitable LoadScene(string sceneName, ISceneTransitionData sceneTransitionData)
+        {
+            await UnloadTransitionScene();
+            await LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+        }
         public Awaitable ChangeScene(string sceneName)
         {
             return ChangeScene(sceneName, _serviceData.DefaultSceneTransitionData);
         }
         public async Awaitable ChangeScene(string sceneName, ISceneTransitionData sceneTransitionData)
         {
-            if (IsLoading)
-                return;
-
-            _currentTransitionData = sceneTransitionData;
-
-            _previousSceneName = CurrentSceneName;
-            _nextSceneName = sceneName;
-
-            IsLoading = true;
-
-            await LoadSceneAsync(sceneTransitionData.TransitionSceneName, LoadSceneMode.Additive);
-        }
-        public async Awaitable LoadScene(string sceneName, LoadSceneMode loadSceneMode)
-        {
-            if (IsLoading)
-                return;
-
-            _previousSceneName = CurrentSceneName;
-            _nextSceneName = sceneName;
-
-            IsLoading = true;
-            await LoadSceneAsync(sceneName, loadSceneMode);
-            IsLoading = false;
-        }
-        public async Awaitable UnloadScene(string sceneName)
-        {
-            await SceneManager.UnloadSceneAsync(sceneName);
+            await UnloadCurrentScene(sceneTransitionData);
+            await LoadScene(sceneName, sceneTransitionData);
         }
         public Awaitable GoBackScene()
         {
@@ -93,31 +80,34 @@ namespace Rossoforge.Scenes.Service
             return ChangeScene(CurrentSceneName, sceneTransitionData);
         }
 
-        public async void OnEventInvoked(SceneTransitionActiveEvent eventArg)
+        private async Awaitable LoadTransitionScene(ISceneTransitionData sceneTransitionData)
         {
-            await ChangeNextScene();
-        }
-        public async void OnEventInvoked(SceneTransitionInactiveEvent eventArg)
-        {
-            await UnloadTransitionScene();
-        }
+            if (_isTransitionRuning)
+                return;
 
-        private async Awaitable ChangeNextScene()
-        {
-            await UnloadSceneAsync(_previousSceneName);
+            _currentTransitionData = sceneTransitionData;
+            _previousSceneName = CurrentSceneName;
 
-            if (!string.IsNullOrWhiteSpace(_nextSceneName))
-            {
-                await LoadSceneAsync(_nextSceneName, LoadSceneMode.Additive);
-                await Awaitable.NextFrameAsync();
-            }
+            _isTransitionRuning = true;
 
-            _eventService.Raise<TargetSceneLoadedCompletedEvent>();
+            _transitionEffectCompletionSource = new AwaitableCompletionSource();
+            await LoadSceneAsync(sceneTransitionData.TransitionSceneName, LoadSceneMode.Additive);
+            await _transitionEffectCompletionSource.Awaitable;
+
+            _isTransitionRuning = false;
         }
         private async Awaitable UnloadTransitionScene()
         {
+            if (_isTransitionRuning)
+                return;
+
+            _isTransitionRuning = true;
+
+            _transitionEffectCompletionSource = new AwaitableCompletionSource();
             await UnloadSceneAsync(_currentTransitionData.TransitionSceneName);
-            IsLoading = false;
+            await _transitionEffectCompletionSource.Awaitable;
+
+            _isTransitionRuning = false;
         }
 
         private async Awaitable LoadSceneAsync(string sceneName, LoadSceneMode mode)
@@ -142,6 +132,17 @@ namespace Rossoforge.Scenes.Service
             }
 
             await asyncOp;
+        }
+
+        public async void OnEventInvoked(SceneTransitionActiveEvent eventArg)
+        {
+            _transitionEffectCompletionSource.SetResult();
+            // This line is used to signal that the transition effect has completed, allowing the scene change to proceed.
+        }
+        public async void OnEventInvoked(SceneTransitionInactiveEvent eventArg)
+        {
+            _transitionEffectCompletionSource.SetResult();
+            // This line is used to signal that the transition effect has completed, allowing the scene change to proceed.
         }
     }
 }
