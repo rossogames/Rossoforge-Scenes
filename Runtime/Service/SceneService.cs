@@ -22,7 +22,7 @@ namespace Rossoforge.Scenes.Service
         private AwaitableCompletionSource _transitionEffectCompletionSource;
 
         public string CurrentSceneName => SceneManager.GetActiveScene().name;
-        public bool _isTransitionRuning;
+        public bool _isTransitionRunning;
 
         public SceneService(SceneServiceData serviceData)
         {
@@ -126,19 +126,17 @@ namespace Rossoforge.Scenes.Service
         /// <param name="sceneTransitionData">Data identifying the transition scene to load.</param>
         private async Awaitable ShowTransitionScene(ISceneTransitionData sceneTransitionData)
         {
-            if (_isTransitionRuning)
+            if (_isTransitionRunning)
                 return;
 
             _currentTransitionData = sceneTransitionData;
             _previousSceneName = CurrentSceneName;
 
-            _isTransitionRuning = true;
+            _isTransitionRunning = true;
 
             _transitionEffectCompletionSource = new AwaitableCompletionSource();
             await LoadSceneAsync(sceneTransitionData.TransitionSceneName, LoadSceneMode.Additive);
             await _transitionEffectCompletionSource.Awaitable;
-
-            _isTransitionRuning = false;
         }
 
         /// <summary>
@@ -146,17 +144,15 @@ namespace Rossoforge.Scenes.Service
         /// </summary>
         private async Awaitable HideTransitionScene()
         {
-            if (_isTransitionRuning)
+            if (!_isTransitionRunning)
                 return;
-
-            _isTransitionRuning = true;
 
             _transitionEffectCompletionSource = new AwaitableCompletionSource();
             _eventService.Raise<TargetSceneLoadedCompletedEvent>(); // Notify that the target scene has finished loading, allowing the transition scene to start its deactivation effect.
             await _transitionEffectCompletionSource.Awaitable; // Wait for the transition scene to finish its deactivation effect before unloading it.
 
             await UnloadSceneAsync(_currentTransitionData.TransitionSceneName);
-            _isTransitionRuning = false;
+            _isTransitionRunning = false;
         }
 
         /// <summary>
