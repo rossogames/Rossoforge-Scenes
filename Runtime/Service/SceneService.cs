@@ -17,12 +17,19 @@ namespace Rossoforge.Scenes.Service
         private IEventService _eventService;
         private SceneServiceData _serviceData;
 
-        private bool _isTransitionRunning;
         private string _previousSceneName;
         private ISceneTransitionData _currentTransitionData;
         private AwaitableCompletionSource _transitionEffectCompletionSource;
 
+        /// <summary>
+        /// Gets the name of the currently active scene in Unity's <see cref="SceneManager"/>.
+        /// </summary>
         public string CurrentSceneName => SceneManager.GetActiveScene().name;
+
+        /// <summary>
+        /// Gets a value indicating whether a scene transition sequence is currently in progress.
+        /// </summary>
+        public bool IsTransitionRunning { get; private set; }
 
         public SceneService(SceneServiceData serviceData)
         {
@@ -44,84 +51,32 @@ namespace Rossoforge.Scenes.Service
         }
 
         /// <summary>
-        /// Changes to the specified scene using the default transition scene.
+        /// Changes to the specified destination scene using the default transition configuration.
         /// </summary>
-        /// <param name="sceneName">The name of the destination scene.</param>
+        /// <param name="sceneName">The name of the destination scene to load.</param>
+        /// <param name="onScreenCoveredAsync">Optional asynchronous callback executed while the transition screen fully covers the view, prior to unloading the current scene.</param>
         public Awaitable ChangeScene(string sceneName, Func<Awaitable> onScreenCoveredAsync = null)
         {
             return ChangeScene(sceneName, _serviceData.DefaultSceneTransitionData, onScreenCoveredAsync);
         }
 
         /// <summary>
-        /// Changes to the specified scene using a specific transition scene.
+        /// Changes to the specified destination scene using a custom transition configuration and optional cleanup task.
         /// </summary>
-        /// <param name="sceneName">The name of the destination scene.</param>
-        /// <param name="sceneTransitionData">Data specifying which transition scene to display during the switch.</param>
+        /// <param name="sceneName">The name of the destination scene to load.</param>
+        /// <param name="sceneTransitionData">Data specifying which transition scene and visual effect settings to use.</param>
+        /// <param name="onScreenCoveredAsync">Optional asynchronous callback executed while the transition screen fully covers the view, prior to unloading the current scene.</param>
         public async Awaitable ChangeScene(string sceneName, ISceneTransitionData sceneTransitionData, Func<Awaitable> onScreenCoveredAsync = null)
         {
-            if (_isTransitionRunning)
+            if (IsTransitionRunning)
             {
                 RossoLogger.Warning("A scene transition is already running.");
                 return;
             }
 
-            await UnloadCurrentScene(sceneTransitionData, onScreenCoveredAsync);
-            await LoadScene(sceneName);
-        }
-
-        /// <summary>
-        /// Navigates back to the previously loaded scene using the default transition scene.
-        /// </summary>
-        public Awaitable GoBackScene(Func<Awaitable> onScreenCoveredAsync = null)
-        {
-            return GoBackScene(_serviceData.DefaultSceneTransitionData, onScreenCoveredAsync);
-        }
-
-        /// <summary>
-        /// Navigates back to the previously loaded scene using a specific transition scene.
-        /// </summary>
-        /// <param name="sceneTransitionData">Data specifying which transition scene to display during the switch.</param>
-        public async Awaitable GoBackScene(ISceneTransitionData sceneTransitionData, Func<Awaitable> onScreenCoveredAsync = null)
-        {
-            if (!string.IsNullOrWhiteSpace(_previousSceneName))
-                await ChangeScene(_previousSceneName, sceneTransitionData, onScreenCoveredAsync);
-        }
-
-        /// <summary>
-        /// Restarts the currently active scene using the default transition scene.
-        /// </summary>
-        public Awaitable RestartScene(Func<Awaitable> onScreenCoveredAsync = null)
-        {
-            return RestartScene(_serviceData.DefaultSceneTransitionData, onScreenCoveredAsync);
-        }
-
-        /// <summary>
-        /// Restarts the currently active scene using a specific transition scene.
-        /// </summary>
-        /// <param name="sceneTransitionData">Data specifying which transition scene to display during the restart.</param>
-        public Awaitable RestartScene(ISceneTransitionData sceneTransitionData, Func<Awaitable> onScreenCoveredAsync = null)
-        {
-            return ChangeScene(CurrentSceneName, sceneTransitionData, onScreenCoveredAsync);
-        }
-
-        /// <summary>
-        /// Loads the target scene and unloads the current transition scene.
-        /// </summary>
-        /// <param name="sceneName">The name of the target scene to load.</param>
-        private async Awaitable LoadScene(string sceneName)
-        {
-            await LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-            await HideTransitionScene();
-        }
-
-        /// <summary>
-        /// Loads the transition scene and unloads the current active scene.
-        /// </summary>
-        /// <param name="sceneTransitionData">Data specifying which transition scene to use.</param>
-        private async Awaitable UnloadCurrentScene(ISceneTransitionData sceneTransitionData, Func<Awaitable> onScreenCoveredAsync = null)
-        {
             await ShowTransitionScene(sceneTransitionData);
 
+            // Execute custom cleanup/saving logic while screen is black/covered
             if (onScreenCoveredAsync != null)
             {
                 try
@@ -130,27 +85,77 @@ namespace Rossoforge.Scenes.Service
                 }
                 catch (Exception ex)
                 {
-                    RossoLogger.Error($"Error executing cleanup during scene transition: {ex.Message}");
+                    RossoLogger.Error($"Error executing cleanup task during scene transition: {ex.Message}\n{ex.StackTrace}");
                 }
             }
 
             _previousSceneName = CurrentSceneName;
             await UnloadSceneAsync(CurrentSceneName);
+
+            await LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+
+            // Ensure the newly loaded additive scene becomes the active scene
+            Scene targetScene = SceneManager.GetSceneByName(sceneName);
+            if (targetScene.IsValid())
+            {
+                SceneManager.SetActiveScene(targetScene);
+            }
+
+            await HideTransitionScene();
         }
 
         /// <summary>
-        /// Loads the specified transition scene additively and waits for its active effect event to complete.
+        /// Navigates back to the previously loaded scene using the default transition configuration.
         /// </summary>
-        /// <param name="sceneTransitionData">Data identifying the transition scene to load.</param>
+        /// <param name="onScreenCoveredAsync">Optional asynchronous callback executed while the transition screen fully covers the view.</param>
+        public Awaitable GoBackScene(Func<Awaitable> onScreenCoveredAsync = null)
+        {
+            return GoBackScene(_serviceData.DefaultSceneTransitionData, onScreenCoveredAsync);
+        }
+
+        /// <summary>
+        /// Navigates back to the previously loaded scene using a custom transition configuration.
+        /// </summary>
+        /// <param name="sceneTransitionData">Data specifying which transition scene to display during navigation.</param>
+        /// <param name="onScreenCoveredAsync">Optional asynchronous callback executed while the transition screen fully covers the view.</param>
+        public async Awaitable GoBackScene(ISceneTransitionData sceneTransitionData, Func<Awaitable> onScreenCoveredAsync = null)
+        {
+            if (!string.IsNullOrWhiteSpace(_previousSceneName))
+                await ChangeScene(_previousSceneName, sceneTransitionData, onScreenCoveredAsync);
+        }
+
+        /// <summary>
+        /// Restarts the currently active scene using the default transition configuration.
+        /// </summary>
+        /// <param name="onScreenCoveredAsync">Optional asynchronous callback executed while the transition screen fully covers the view.</param>
+        public Awaitable RestartScene(Func<Awaitable> onScreenCoveredAsync = null)
+        {
+            return RestartScene(_serviceData.DefaultSceneTransitionData, onScreenCoveredAsync);
+        }
+
+        /// <summary>
+        /// Restarts the currently active scene using a custom transition configuration.
+        /// </summary>
+        /// <param name="sceneTransitionData">Data specifying which transition scene to display during restart.</param>
+        /// <param name="onScreenCoveredAsync">Optional asynchronous callback executed while the transition screen fully covers the view.</param>
+        public Awaitable RestartScene(ISceneTransitionData sceneTransitionData, Func<Awaitable> onScreenCoveredAsync = null)
+        {
+            return ChangeScene(CurrentSceneName, sceneTransitionData, onScreenCoveredAsync);
+        }
+
+        /// <summary>
+        /// Loads the transition scene additively and waits for its activation visual effect to finish.
+        /// </summary>
+        /// <param name="sceneTransitionData">Data specifying which transition scene to load.</param>
         private async Awaitable ShowTransitionScene(ISceneTransitionData sceneTransitionData)
         {
-            if (_isTransitionRunning)
+            if (IsTransitionRunning)
                 return;
 
             _currentTransitionData = sceneTransitionData;
             _previousSceneName = CurrentSceneName;
 
-            _isTransitionRunning = true;
+            IsTransitionRunning = true;
 
             _transitionEffectCompletionSource = new AwaitableCompletionSource();
             await LoadSceneAsync(sceneTransitionData.TransitionSceneName, LoadSceneMode.Additive);
@@ -158,26 +163,30 @@ namespace Rossoforge.Scenes.Service
         }
 
         /// <summary>
-        /// Unloads the active transition scene and waits for its inactive effect event to complete.
+        /// Notifies the transition scene to begin its deactivation visual effect, waits for it to finish, and unloads it.
         /// </summary>
         private async Awaitable HideTransitionScene()
         {
-            if (!_isTransitionRunning)
+            if (!IsTransitionRunning)
                 return;
 
             _transitionEffectCompletionSource = new AwaitableCompletionSource();
-            _eventService.Raise<TargetSceneLoadedCompletedEvent>(); // Notify that the target scene has finished loading, allowing the transition scene to start its deactivation effect.
-            await _transitionEffectCompletionSource.Awaitable; // Wait for the transition scene to finish its deactivation effect before unloading it.
+
+            // Notify the transition scene that target loading is complete so it can start its fade-out/custom animation
+            _eventService.Raise<TargetSceneLoadedCompletedEvent>();
+
+            // Wait for SceneTransitionInactiveEvent to signal that deactivation effect finished
+            await _transitionEffectCompletionSource.Awaitable;
 
             await UnloadSceneAsync(_currentTransitionData.TransitionSceneName);
-            _isTransitionRunning = false;
+            IsTransitionRunning = false;
         }
 
         /// <summary>
-        /// Asynchronously loads a scene using Unity's <see cref="SceneManager"/>.
+        /// Asynchronously loads a scene by name using Unity's <see cref="SceneManager"/>.
         /// </summary>
         /// <param name="sceneName">The name of the scene to load.</param>
-        /// <param name="mode">The load mode (Additive or Single).</param>
+        /// <param name="mode">The loading mode (Additive or Single).</param>
         private async Awaitable LoadSceneAsync(string sceneName, LoadSceneMode mode)
         {
             var asyncOp = SceneManager.LoadSceneAsync(sceneName, mode);
@@ -191,7 +200,7 @@ namespace Rossoforge.Scenes.Service
         }
 
         /// <summary>
-        /// Asynchronously unloads a scene using Unity's <see cref="SceneManager"/>.
+        /// Asynchronously unloads a scene by name using Unity's <see cref="SceneManager"/>.
         /// </summary>
         /// <param name="sceneName">The name of the scene to unload.</param>
         private async Awaitable UnloadSceneAsync(string sceneName)
@@ -207,21 +216,21 @@ namespace Rossoforge.Scenes.Service
         }
 
         /// <summary>
-        /// Handles the event emitted when the transition scene finishes its activation visual effect.
+        /// Handles the event emitted when the transition scene finishes its activation visual effect (screen fully covered).
         /// </summary>
         /// <param name="eventArg">The event payload.</param>
-        public async void OnEventInvoked(SceneTransitionActiveEvent eventArg)
+        public void OnEventInvoked(SceneTransitionActiveEvent eventArg)
         {
-            _transitionEffectCompletionSource?.SetResult();
+            _transitionEffectCompletionSource?.TrySetResult();
         }
 
         /// <summary>
-        /// Handles the event emitted when the transition scene finishes its deactivation visual effect.
+        /// Handles the event emitted when the transition scene finishes its deactivation visual effect (screen revealed).
         /// </summary>
         /// <param name="eventArg">The event payload.</param>
-        public async void OnEventInvoked(SceneTransitionInactiveEvent eventArg)
+        public void OnEventInvoked(SceneTransitionInactiveEvent eventArg)
         {
-            _transitionEffectCompletionSource?.SetResult();
+            _transitionEffectCompletionSource?.TrySetResult();
         }
     }
 }
