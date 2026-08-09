@@ -144,6 +144,39 @@ namespace Rossoforge.Scenes.Service
         }
 
         /// <summary>
+        /// Asynchronously loads a scene by name using Unity's <see cref="SceneManager"/>.
+        /// </summary>
+        /// <param name="sceneName">The name of the scene to load.</param>
+        /// <param name="mode">The loading mode (Additive or Single).</param>
+        public async Awaitable LoadSceneAsync(string sceneName, LoadSceneMode mode)
+        {
+            var asyncOp = SceneManager.LoadSceneAsync(sceneName, mode);
+            if (asyncOp == null)
+            {
+                RossoLogger.Error($"Failed to load scene {sceneName}");
+                return;
+            }
+
+            await asyncOp;
+        }
+
+        /// <summary>
+        /// Asynchronously unloads a scene by name using Unity's <see cref="SceneManager"/>.
+        /// </summary>
+        /// <param name="sceneName">The name of the scene to unload.</param>
+        public async Awaitable UnloadSceneAsync(string sceneName)
+        {
+            var asyncOp = SceneManager.UnloadSceneAsync(sceneName);
+            if (asyncOp == null)
+            {
+                RossoLogger.Error($"Failed to unload scene {sceneName}");
+                return;
+            }
+
+            await asyncOp;
+        }
+
+        /// <summary>
         /// Loads the transition scene additively and waits for its activation visual effect to finish.
         /// </summary>
         /// <param name="sceneTransitionData">Data specifying which transition scene to load.</param>
@@ -180,39 +213,6 @@ namespace Rossoforge.Scenes.Service
 
             await UnloadSceneAsync(_currentTransitionData.TransitionSceneName);
             IsTransitionRunning = false;
-        }
-
-        /// <summary>
-        /// Asynchronously loads a scene by name using Unity's <see cref="SceneManager"/>.
-        /// </summary>
-        /// <param name="sceneName">The name of the scene to load.</param>
-        /// <param name="mode">The loading mode (Additive or Single).</param>
-        private async Awaitable LoadSceneAsync(string sceneName, LoadSceneMode mode)
-        {
-            var asyncOp = SceneManager.LoadSceneAsync(sceneName, mode);
-            if (asyncOp == null)
-            {
-                RossoLogger.Error($"Failed to load scene {sceneName}");
-                return;
-            }
-
-            await asyncOp;
-        }
-
-        /// <summary>
-        /// Asynchronously unloads a scene by name using Unity's <see cref="SceneManager"/>.
-        /// </summary>
-        /// <param name="sceneName">The name of the scene to unload.</param>
-        private async Awaitable UnloadSceneAsync(string sceneName)
-        {
-            var asyncOp = SceneManager.UnloadSceneAsync(sceneName);
-            if (asyncOp == null)
-            {
-                RossoLogger.Error($"Failed to unload scene {sceneName}");
-                return;
-            }
-
-            await asyncOp;
         }
 
         /// <summary>
