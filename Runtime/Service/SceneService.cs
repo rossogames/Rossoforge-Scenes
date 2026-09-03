@@ -1,6 +1,7 @@
-using Rossoforge.Core.Events;
 using Rossoforge.Core.Scenes;
 using Rossoforge.Core.Services;
+using Rossoforge.Events.Bus;
+using Rossoforge.Events.Service;
 using Rossoforge.Scenes.Events;
 using Rossoforge.Services;
 using Rossoforge.Utils.Logger;
@@ -15,7 +16,7 @@ namespace Rossoforge.Scenes.Service
         IEventListener<SceneTransitionInactiveEvent>
     {
         private IEventService _eventService;
-        private SceneServiceData _serviceData;
+        private SceneDataService _dataService;
 
         private string _previousSceneName;
         private ISceneTransitionData _currentTransitionData;
@@ -31,9 +32,9 @@ namespace Rossoforge.Scenes.Service
         /// </summary>
         public bool IsTransitionRunning { get; private set; }
 
-        public SceneService(SceneServiceData serviceData)
+        public SceneService(SceneDataService dataService)
         {
-            _serviceData = serviceData;
+            _dataService = dataService;
         }
 
         public void Initialize()
@@ -57,7 +58,7 @@ namespace Rossoforge.Scenes.Service
         /// <param name="onScreenCoveredAsync">Optional asynchronous callback executed while the transition screen fully covers the view, prior to unloading the current scene.</param>
         public Awaitable ChangeScene(string sceneName, Func<Awaitable> onScreenCoveredAsync = null)
         {
-            return ChangeScene(sceneName, _serviceData.DefaultSceneTransitionData, onScreenCoveredAsync);
+            return ChangeScene(sceneName, _dataService.DefaultSceneTransitionData, onScreenCoveredAsync);
         }
 
         /// <summary>
@@ -110,7 +111,7 @@ namespace Rossoforge.Scenes.Service
         /// <param name="onScreenCoveredAsync">Optional asynchronous callback executed while the transition screen fully covers the view.</param>
         public Awaitable GoBackScene(Func<Awaitable> onScreenCoveredAsync = null)
         {
-            return GoBackScene(_serviceData.DefaultSceneTransitionData, onScreenCoveredAsync);
+            return GoBackScene(_dataService.DefaultSceneTransitionData, onScreenCoveredAsync);
         }
 
         /// <summary>
@@ -130,7 +131,7 @@ namespace Rossoforge.Scenes.Service
         /// <param name="onScreenCoveredAsync">Optional asynchronous callback executed while the transition screen fully covers the view.</param>
         public Awaitable RestartScene(Func<Awaitable> onScreenCoveredAsync = null)
         {
-            return RestartScene(_serviceData.DefaultSceneTransitionData, onScreenCoveredAsync);
+            return RestartScene(_dataService.DefaultSceneTransitionData, onScreenCoveredAsync);
         }
 
         /// <summary>

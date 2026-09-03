@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace Rossoforge.Scenes.Service
 {
-    [CreateAssetMenu(fileName = nameof(SceneServiceData), menuName = "Rossoforge/Scenes/Service Data")]
-    public class SceneServiceData : ScriptableObject
+    [CreateAssetMenu(fileName = nameof(SceneDataService), menuName = "Rossoforge/Data Service/Scenes")]
+    public class SceneDataService : ScriptableObject
     {
         [field: SerializeField]
         public SceneTransitionData DefaultSceneTransitionData { get; private set; }
