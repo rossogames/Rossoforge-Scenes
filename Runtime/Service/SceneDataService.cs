@@ -1,4 +1,4 @@
-using Rossoforge.Scenes.Data;
+using Rossoforge.Scenes.DataConfig;
 using UnityEngine;
 
 namespace Rossoforge.Scenes.Service
@@ -7,6 +7,6 @@ namespace Rossoforge.Scenes.Service
     public class SceneDataService : ScriptableObject
     {
         [field: SerializeField]
-        public SceneTransitionData DefaultSceneTransitionData { get; private set; }
+        public SceneTransitionDataConfig DefaultSceneTransition { get; private set; }
     }
 }
