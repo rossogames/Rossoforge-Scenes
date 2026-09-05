@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: efd725ff1e7e254409dd1a07beeca51f, type: 3}
-  m_Name: SceneTransitionData_SideLeftToRight
+  m_Script: {fileID: 11500000, guid: 12d5354deee6a01428ac1540e45c9c40, type: 3}
+  m_Name: SceneTransitionDataConfig_SideLeftToRight
   m_EditorClassIdentifier: 
   <TransitionSceneName>k__BackingField: SceneTransitionSideLeftToRight

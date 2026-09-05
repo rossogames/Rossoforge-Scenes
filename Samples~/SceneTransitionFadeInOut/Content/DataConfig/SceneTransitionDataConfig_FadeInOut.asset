@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd189e56bdcac2041a7a35234a468302, type: 3}
-  m_Name: SceneServiceData
+  m_Script: {fileID: 11500000, guid: 12d5354deee6a01428ac1540e45c9c40, type: 3}
+  m_Name: SceneTransitionDataConfig_FadeInOut
   m_EditorClassIdentifier: 
-  <DefaultSceneTransitionData>k__BackingField: {fileID: 11400000, guid: 659ca7eb590d0854bb7a6bfcb36d573b, type: 2}
+  <TransitionSceneName>k__BackingField: SceneTransitionFadeInOut
