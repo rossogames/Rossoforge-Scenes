@@ -1,5 +1,6 @@
-using Rossoforge.Core.Events;
-using Rossoforge.Services;
+using Rossoforge.Events.Service;
+using Rossoforge.Scenes.Components;
+using Rossoforge.Services.Locator;
 using UnityEngine;
 
 namespace Rossoforge.Scenes.Samples.SceneTransitionSideLeftToRight

@@ -1,8 +1,9 @@
-using Rossoforge.Core.Events;
-using Rossoforge.Core.Scenes;
-using Rossoforge.Scenes.Data;
+using Rossoforge.Events.Bus;
+using Rossoforge.Events.Service;
+using Rossoforge.Scenes.DataConfig;
 using Rossoforge.Scenes.Events;
-using Rossoforge.Services;
+using Rossoforge.Scenes.Service;
+using Rossoforge.Services.Locator;
 using Rossoforge.Utils.Logger;
 using UnityEngine;
 
@@ -18,7 +19,7 @@ namespace Rossoforge.Scenes.Samples.ChangeSceneDemo
         private string sceneName;
 
         [SerializeField]
-        private SceneTransitionData _customSceneTransitionData;
+        private SceneTransitionDataConfig _customSceneTransitionData;
 
         private ISceneService _sceneService;
         private IEventService _eventService;

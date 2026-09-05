@@ -1,8 +1,9 @@
-using Rossoforge.Core.Events;
+using Rossoforge.Events.Bus;
+using Rossoforge.Events.Service;
 using Rossoforge.Scenes.Events;
 using UnityEngine;
 
-namespace Rossoforge.Scenes
+namespace Rossoforge.Scenes.Components
 {
     public abstract class SceneTransition : MonoBehaviour,
         IEventListener<TargetSceneLoadedCompletedEvent>
